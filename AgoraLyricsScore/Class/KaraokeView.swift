@@ -229,7 +229,7 @@ extension KaraokeView {
         lyricsView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         
-//        if scoringAtBottom {
+        if scoringAtBottom {
             lyricsView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
             lyricsView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
             lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: topAnchor, constant: lyricsView.topSpaces)
@@ -242,20 +242,20 @@ extension KaraokeView {
             scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: lyricsView.bottomAnchor, constant: spacing)
             scoringViewTopConstraint.isActive = true
             scoringView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-//        } else {
-//            scoringView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-//            scoringView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-//            scoringViewHeightConstraint = scoringView.heightAnchor.constraint(equalToConstant: scoringView.viewHeight)
-//            scoringViewHeightConstraint.isActive = true
-//            scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: topAnchor, constant: scoringView.topSpaces)
-//            scoringViewTopConstraint.isActive = true
-//            
-//            lyricsView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-//            lyricsView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-//            lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: scoringView.bottomAnchor, constant: spacing)
-//            lyricsViewTopConstraint.isActive = true
-//            lyricsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-//        }
+        } else {
+            scoringView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+            scoringView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+            scoringViewHeightConstraint = scoringView.heightAnchor.constraint(equalToConstant: scoringView.viewHeight)
+            scoringViewHeightConstraint.isActive = true
+            scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: topAnchor, constant: scoringView.topSpaces)
+            scoringViewTopConstraint.isActive = true
+            
+            lyricsView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+            lyricsView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+            lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: scoringView.bottomAnchor, constant: spacing)
+            lyricsViewTopConstraint.isActive = true
+            lyricsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        }
         
         backgroundImageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         backgroundImageView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
@@ -276,18 +276,22 @@ extension KaraokeView {
         scoringView.isHidden = !scoringEnabled
         
         if scoringAtBottom {
-//            lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: topAnchor, constant: lyricsView.topSpaces)
-//            scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: lyricsView.bottomAnchor, constant: spacing)
-//            scoringView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-//            lyricsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = false
+            lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: topAnchor, constant: lyricsView.topSpaces)
+            lyricsViewTopConstraint.isActive = true
+            scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: lyricsView.bottomAnchor, constant: spacing)
+            scoringViewTopConstraint.isActive = true
+            scoringView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+            lyricsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = false
             
             lyricsViewTopConstraint.constant = lyricsView.topSpaces
             scoringViewTopConstraint.constant = scoringEnabled ? spacing : 0 - scoringView.viewHeight
         } else {
-//            scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: topAnchor, constant: scoringView.topSpaces)
-//            lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: scoringView.bottomAnchor, constant: spacing)
-//            scoringView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = false
-//            lyricsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+            scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: topAnchor, constant: scoringView.topSpaces)
+            scoringViewTopConstraint.isActive = true
+            lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: scoringView.bottomAnchor, constant: spacing)
+            lyricsViewTopConstraint.isActive = true
+            scoringView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = false
+            lyricsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
             
             lyricsViewTopConstraint.constant = scoringEnabled ? spacing : 0 - scoringView.viewHeight
             scoringViewTopConstraint.constant = scoringView.topSpaces
