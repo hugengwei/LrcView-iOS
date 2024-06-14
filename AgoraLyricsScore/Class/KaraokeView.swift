@@ -253,8 +253,8 @@ extension KaraokeView {
         backgroundImageView.image = backgroundImage
         backgroundImageView.isHidden = backgroundImage == nil
         lyricsViewTopConstraint.constant = lyricsView.topSpaces
-        scoringViewHeightConstraint.constant = scoringView.viewHeight
-        scoringViewTopConstraint.constant = scoringEnabled ? spacing : 0 - scoringView.viewHeight
+        scoringViewHeightConstraint.constant = scoringEnabled ? scoringView.viewHeight : 0
+        scoringViewTopConstraint.constant = scoringEnabled ? spacing : 0
         scoringView.isHidden = !scoringEnabled
     }
     
