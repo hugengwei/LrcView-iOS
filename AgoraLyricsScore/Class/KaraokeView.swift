@@ -275,6 +275,7 @@ extension KaraokeView {
         scoringViewHeightConstraint.constant = scoringView.viewHeight
         scoringView.isHidden = !scoringEnabled
         
+        NSLayoutConstraint.deactivate([lyricsViewTopConstraint, scoringViewTopConstraint])
         if scoringAtBottom {
             lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: topAnchor, constant: lyricsView.topSpaces)
             lyricsViewTopConstraint.isActive = true
