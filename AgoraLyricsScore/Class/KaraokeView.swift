@@ -226,7 +226,7 @@ extension KaraokeView {
         
         lyricsViewLeftConstraint = lyricsView.leftAnchor.constraint(equalTo: leftAnchor, constant: lyricsView.leftSpaces)
         lyricsViewLeftConstraint.isActive = true
-        lyricsViewRightConstraint = lyricsView.rightAnchor.constraint(equalTo: rightAnchor, constant: -lyricsView.rightSpaces)
+        lyricsViewRightConstraint = lyricsView.rightAnchor.constraint(equalTo: rightAnchor, constant: lyricsView.rightSpaces)
         lyricsViewRightConstraint.isActive = true
         lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: topAnchor, constant: lyricsView.topSpaces)
         lyricsViewTopConstraint.isActive = true
@@ -261,8 +261,8 @@ extension KaraokeView {
         lyricsViewRightConstraint.constant = lyricsView.rightSpaces
         scoringViewHeightConstraint.constant = scoringEnabled ? scoringView.viewHeight : 0
         scoringViewTopConstraint.constant = scoringEnabled ? spacing : 0
-        scoringViewLeftConstraint.constant = lyricsView.leftSpaces
-        scoringViewRightConstraint.constant = lyricsView.rightSpaces
+        scoringViewLeftConstraint.constant = scoringView.leftSpaces
+        scoringViewRightConstraint.constant = scoringView.rightSpaces
         scoringView.isHidden = !scoringEnabled
     }
     
