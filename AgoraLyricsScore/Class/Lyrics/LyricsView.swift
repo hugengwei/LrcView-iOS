@@ -13,6 +13,8 @@ protocol LyricsViewDelegate: NSObjectProtocol {
 }
 
 public class LyricsView: UIView {
+    /// 渲染视图到顶部的间距
+    @objc public var topSpaces: CGFloat = 0 { didSet { updateUI() } }
     /// 无歌词提示文案
     @objc public var noLyricTipsText: String = "无歌词" { didSet { updateUI() } }
     /// 无歌词提示文字颜色
