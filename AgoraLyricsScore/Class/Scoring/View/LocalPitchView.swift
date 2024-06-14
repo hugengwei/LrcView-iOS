@@ -7,10 +7,10 @@
 
 import UIKit
 
-class LocalPitchView: UIView {
+public class LocalPitchView: UIView {
     private let emitter = Emitter()
-    private let bgView = UIImageView()
-    private let verticalLineView = UIImageView()
+    public let bgView = UIImageView()
+    public let verticalLineView = UIImageView()
     private let indicatedView = UIImageView()
     private var indicatedCenterYConstant: CGFloat = 0.0
     static let scoreAnimateWidth: CGFloat = 30
