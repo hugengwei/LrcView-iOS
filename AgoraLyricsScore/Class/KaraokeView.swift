@@ -276,21 +276,21 @@ extension KaraokeView {
         scoringView.isHidden = !scoringEnabled
         
         if scoringAtBottom {
-            lyricsViewTopConstraint.constant = lyricsView.topSpaces
-            scoringViewTopConstraint.constant = scoringEnabled ? spacing : 0 - scoringView.viewHeight
-            
             lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: topAnchor, constant: lyricsView.topSpaces)
             scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: lyricsView.bottomAnchor, constant: spacing)
             scoringView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
             lyricsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = false
-        } else {
-            lyricsViewTopConstraint.constant = scoringEnabled ? spacing : 0 - scoringView.viewHeight
-            scoringViewTopConstraint.constant = scoringView.topSpaces
             
+            lyricsViewTopConstraint.constant = lyricsView.topSpaces
+            scoringViewTopConstraint.constant = scoringEnabled ? spacing : 0 - scoringView.viewHeight
+        } else {
             scoringViewTopConstraint = scoringView.topAnchor.constraint(equalTo: topAnchor, constant: scoringView.topSpaces)
             lyricsViewTopConstraint = lyricsView.topAnchor.constraint(equalTo: scoringView.bottomAnchor, constant: spacing)
             scoringView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = false
             lyricsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+            
+            lyricsViewTopConstraint.constant = scoringEnabled ? spacing : 0 - scoringView.viewHeight
+            scoringViewTopConstraint.constant = scoringView.topSpaces
         }
     }
     
