@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ScoringCanvasView: UIView {
+public class ScoringCanvasView: UIView {
     /// 游标的起始位置
     var defaultPitchCursorX: CGFloat = 100
     /// 音准线的高度
@@ -18,13 +18,17 @@ class ScoringCanvasView: UIView {
     var standardPitchStickViewColor: UIColor = .gray
     /// 音准线匹配后的背景色
     var standardPitchStickViewHighlightColor: UIColor = .orange
+    /// 是否隐藏五线谱
+    @objc public var isHiddenStaff: Bool = false
     
     fileprivate var standardInfos = [DrawInfo]()
     fileprivate var highlightInfos = [DrawInfo]()
     fileprivate var widthPreMs: CGFloat { movingSpeedFactor / 1000 }
     
-    override func draw(_ rect: CGRect) {
-        drawStaff()
+    public override func draw(_ rect: CGRect) {
+        if !isHiddenStaff {
+            drawStaff()
+        }
         drawStandardInfos()
         drawHighlightInfos()
     }
