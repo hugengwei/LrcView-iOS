@@ -254,13 +254,18 @@ extension ScoringMachine { /** ui 位置 **/
             Log.errorText(text: "calculatedY viewHeight invalid \(viewHeight)", tag: logTag)
             return nil
         }
+        // 上下留4pt的边距
+        let newViewHeight = viewHeight - 8
         
         /** 计算扩展 **/
-        let pitchPerPoint = (CGFloat(maxPitch) - CGFloat(minPitch)) / viewHeight
+        // 每像素点值等于多少pitch值
+        let pitchPerPoint = (CGFloat(maxPitch) - CGFloat(minPitch)) / newViewHeight
         let extends = pitchPerPoint * standardPitchStickViewHeight
         
+        // newViewHeight * pitchPerPoint 当前高度等于多少pitch值
+        
         if pitch < minPitch {
-            return viewHeight - extends/2
+            return newViewHeight * pitchPerPoint - extends/2
         }
         
         if pitch > maxPitch {
@@ -269,13 +274,13 @@ extension ScoringMachine { /** ui 位置 **/
         
         /** 计算实际的渲染高度 **/
         let rate = (pitch - minPitch) / (maxPitch - minPitch)
-        let renderingHeight = viewHeight - extends
+        let renderingHeight = newViewHeight * pitchPerPoint - extends
         
         /** 计算距离 （从bottom到top） **/
         let distance = extends/2 + (renderingHeight * rate)
         
         /** 计算y **/
-        let y = viewHeight - distance
+        let y = (newViewHeight * pitchPerPoint - distance)/pitchPerPoint
         
         if y.isNaN {
             Log.errorText(text: "calculatedY result invalid pitch:\(pitch) viewHeight:\(viewHeight) minPitch:\(minPitch) maxPitch:\(maxPitch) standardPitchStickViewHeight:\(standardPitchStickViewHeight)", tag: logTag)
