@@ -42,8 +42,8 @@ public class ScoringView: UIView {
     var scoreCompensationOffset = 0 { didSet { updateUI() } }
     
     var progress: UInt = 0 { didSet { updateProgress() } }
-    fileprivate let localPitchView = LocalPitchView()
-    fileprivate let canvasView = ScoringCanvasView()
+    @objc public let localPitchView = LocalPitchView()
+    @objc public let canvasView = ScoringCanvasView()
     /// use for debug only
     fileprivate let consoleView = ConsoleView()
     private var canvasViewHeightConstraint, localPitchViewWidthConstraint: NSLayoutConstraint!
