@@ -81,14 +81,19 @@ public class LocalPitchView: UIView {
     /// 设置游标位置
     /// - Parameter y: 从top到bottom方向上的距离
     func setIndicatedViewY(y: CGFloat) {
-        let constant = (bounds.height - y) * -1
+        // 若y值大于视图高度，将y值重置为最大视图高度
+        var newY = y
+        if newY > bounds.height {
+            newY = bounds.height
+        }
+        let constant = (bounds.height - newY) * -1
         let duration: TimeInterval = indicatedCenterYConstant < constant ? 0.15 : 0.05
         indicatedCenterYConstant = constant
         indicatedViewCenterYConstraint.constant = constant
         UIView.animate(withDuration: duration, delay: 0, options: []) { [weak self] in
             self?.layoutIfNeeded()
         }
-        emitter.setupEmitterPoint(point: .init(x: defaultPitchCursorX-3, y: y))
+        emitter.setupEmitterPoint(point: .init(x: defaultPitchCursorX-3, y: newY))
     }
       
     func startEmitter() {
