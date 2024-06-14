@@ -12,6 +12,10 @@ public class ScoringView: UIView {
     @objc public var viewHeight: CGFloat = 120 { didSet { updateUI() } }
     /// 渲染视图到顶部的间距
     @objc public var topSpaces: CGFloat = 0 { didSet { updateUI() } }
+    /// 渲染视图到左边的间距
+    @objc public var leftSpaces: CGFloat = 0 { didSet { updateUI() } }
+    /// 渲染视图到右边的间距
+    @objc public var rightSpaces: CGFloat = 0 { didSet { updateUI() } }
     /// 游标的起始位置
     @objc public var defaultPitchCursorX: CGFloat = 100 { didSet { updateUI() } }
     /// 音准线的高度
