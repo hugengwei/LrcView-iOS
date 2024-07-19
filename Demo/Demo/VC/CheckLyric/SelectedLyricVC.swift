@@ -25,7 +25,7 @@ class SelectedLyricVC: UIViewController {
     private func setupUI() {
         title = "init..."
         view.backgroundColor = .white
-        textField.text = "\(89488966)"
+        textField.text = "\(547332004)"
         textField.placeholder = "请输入歌曲id"
         textField.borderStyle = .roundedRect
         view.addSubview(textField)
@@ -119,6 +119,8 @@ extension SelectedLyricVC: MccManagerDelegateEx {
                         lyricData: Data,
                         pitchData: Data,
                         percent: Int,
+                        lyricOffset: Int,
+                        songOffsetBegin: Int,
                         errMsg: String?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -134,7 +136,7 @@ extension SelectedLyricVC: MccManagerDelegateEx {
     
     func onMccExScoreStart(_ manager: MccManagerEx) {}
     func onOpenMusic(_ manager: MccManagerEx) {}
-    func onPitch(_ songCode: Int, data: AgoraRawScoreData) {}
-    func onLineScore(_ songCode: Int, value: AgoraLineScoreData) {}
+    func onPitch(_ songCode: Int, data: AgoraRawScoreDataEx) {}
+    func onLineScore(_ songCode: Int, value: AgoraLineScoreDataEx) {}
 }
 

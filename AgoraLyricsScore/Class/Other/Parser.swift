@@ -11,6 +11,7 @@ class Parser {
     private let logTag = "Parser"
     func parseLyricData(data: Data,
                         pitchFileData: Data? = nil,
+                        lyricOffset: Int,
                         includeCopyrightSentence: Bool = false) -> LyricModel? {
         guard data.count > 0 else {
             Log.errorText(text: "data.count == 0", tag: logTag)
@@ -24,6 +25,7 @@ class Parser {
             let parser = KRCParser()
             return parser.parse(krcFileData: data,
                                 pitchFileData: pitchFileData,
+                                lyricOffset: lyricOffset,
                                 includeCopyrightSentence: includeCopyrightSentence)
         case .xml:
             let parser = XmlParser()
@@ -57,7 +59,13 @@ class Parser {
             return .lrc
         }
         
-        // 检测KRC格式的特征，通常是特定的标签如[id:$xxxxxxxx]
+        /// enhance lrc:[00:50.677]<00:50.677>走<00:50.956>走
+        let enhanceLrcPattern = "\\[\\d{2}:\\d{2}\\.\\d{2,3}\\]\\<\\d{2}:\\d{2}\\.\\d{2,3}\\>"
+        if let _ = string.range(of: enhanceLrcPattern, options: .regularExpression) {
+            return .lrc
+        }
+        
+        // 检测KRC格式的特征
         let krcPattern = "\\[(\\w+):([^]]*)]"
         if let _ = string.range(of: krcPattern, options: .regularExpression) {
             return .krc

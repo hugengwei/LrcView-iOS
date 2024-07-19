@@ -65,7 +65,7 @@ class TestParser: XCTestCase {
         let data = try! Data(contentsOf: url)
 
         let parser = Parser()
-        let model = parser.parseLyricData(data: data)
+        let model = parser.parseLyricData(data: data, lyricOffset: 0)
         XCTAssertNil(model)
     }
     
@@ -74,7 +74,7 @@ class TestParser: XCTestCase {
         let data = try! Data(contentsOf: url)
 
         let parser = Parser()
-        let model = parser.parseLyricData(data: data)
+        let model = parser.parseLyricData(data: data, lyricOffset: 0)
         XCTAssertNotNil(model)
         
         let infos = ScoringMachine.createData(data: model!)
@@ -123,16 +123,16 @@ class TestParser: XCTestCase {
         let url = URL(fileURLWithPath: Bundle.current.path(forResource: "4875936889260991133", ofType: "krc")!)
         let data = try! Data(contentsOf: url)
         let p = KRCParser()
-        guard let model = p.parse(krcFileData: data) else {
+        guard let model = p.parse(krcFileData: data, lyricOffset: 10) else {
             XCTFail()
             return
         }
         XCTAssert(model.lines.count == 44)
-        XCTAssert(model.lines.first!.beginTime == 1067)
+        XCTAssert(model.lines.first!.beginTime == 1067 + 10)
         XCTAssert(model.name  == "十年")
         XCTAssert(model.singer  == "陈奕迅")
         XCTAssert(model.lyricsType  == .krc)
-        XCTAssertEqual(model.duration, 381601)
+        XCTAssertEqual(model.duration, 381601 + 10)
         XCTAssert(model.preludeEndPosition  == 0)
         XCTAssertTrue(model.hasPitch == false)
     }
@@ -141,7 +141,7 @@ class TestParser: XCTestCase {
         let url = URL(fileURLWithPath: Bundle.current.path(forResource: "3017502026609527683", ofType: "krc")!)
         let data = try! Data(contentsOf: url)
         let p = KRCParser()
-        guard let model = p.parse(krcFileData: data) else {
+        guard let model = p.parse(krcFileData: data, lyricOffset: 0) else {
             XCTFail()
             return
         }
@@ -181,7 +181,7 @@ class TestParser: XCTestCase {
         
         
         let p = Parser()
-        guard let model = p.parseLyricData(data: krcFileData, pitchFileData: pitchFileData, includeCopyrightSentence: true) else {
+        guard let model = p.parseLyricData(data: krcFileData, pitchFileData: pitchFileData, lyricOffset: 0, includeCopyrightSentence: true) else {
             XCTFail()
             return
         }
@@ -238,6 +238,67 @@ class TestParser: XCTestCase {
         XCTAssert(model.lines.count == 86)
         XCTAssert(model.name  == "热烈的少年 (是热烈)")
         XCTAssert(model.lines[1].beginTime == 737)
+    }
+    
+    func testEnhancedLrcFile() {
+        let url = URL(fileURLWithPath: Bundle.current.path(forResource: "EnhancedLRCformat", ofType: "lrc")!)
+        let data = try! Data(contentsOf: url)
+        guard let model = KaraokeView.parseLyricData(lyricFileData: data) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(model.lines.count == 26)
+        XCTAssert(model.lines.first!.content == "又是九月九重阳夜难聚首")
+        XCTAssertTrue(model.lines[0].tones[0].beginTime == 23 * 1000 + 997)
+        XCTAssert(model.lines[0].tones[10].duration == (29 * 1000 + 326) - (28 * 1000 + 665) - 1) /** gap was 1 ms between lines **/
+        XCTAssertEqual(model.hasPitch, false)
+        XCTAssertTrue(model.lyricsType == .lrc)
+    }
+    
+    func testEnhancedLrcFile2() {
+        let url = URL(fileURLWithPath: Bundle.current.path(forResource: "EnhancedLRCformat2", ofType: "lrc")!)
+        let data = try! Data(contentsOf: url)
+        guard let model = KaraokeView.parseLyricData(lyricFileData: data) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(model.lines.count == 52)
+        XCTAssert(model.lines.first!.content == "apologiz")
+        XCTAssertTrue(model.lines[0].tones[0].beginTime == 4 * 1000 + 841)
+        XCTAssert(model.lines[7].tones[12].duration == (54 * 1000 + 578) - (54 * 1000 + 56) - 1) /** gap was 1 ms between lines **/
+        XCTAssertEqual(model.hasPitch, false)
+        XCTAssertTrue(model.lyricsType == .lrc)
+    }
+    
+    func testEnhancedLrcFile3() {
+        let url = URL(fileURLWithPath: Bundle.current.path(forResource: "EnhancedLRCformat3", ofType: "lrc")!)
+        let data = try! Data(contentsOf: url)
+        guard let model = KaraokeView.parseLyricData(lyricFileData: data) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(model.lines.count == 8)
+        XCTAssert(model.lines.first!.content == "他们总是说我有时不会怎么讲话")
+        XCTAssertTrue(model.lines[0].tones[0].beginTime == 18 * 1000 + 912)
+        /// <04:51.526>大[04:53.964]
+        XCTAssert(model.lines[6].tones[11].duration == (4 * 60 * 1000 + 53 * 1000 + 964) - (4 * 60 * 1000 + 51 * 1000 + 526) - 1) /** gap was 1 ms between lines **/
+        XCTAssertEqual(model.hasPitch, false)
+        XCTAssertTrue(model.lyricsType == .lrc)
+    }
+    
+    func testEnhancedLrcFile4() {
+        let url = URL(fileURLWithPath: Bundle.current.path(forResource: "EnhancedLRCformat4", ofType: "lrc")!)
+        let data = try! Data(contentsOf: url)
+        guard let model = KaraokeView.parseLyricData(lyricFileData: data) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(model.lines.count == 52)
+        XCTAssert(model.lines.first!.content == "apologiz")
+        XCTAssertTrue(model.lines[0].tones[0].beginTime == 4 * 1000 + 841)
+        XCTAssert(model.lines[7].tones[12].duration == (54 * 1000 + 578) - (54 * 1000 + 56) - 1) /** gap was 1 ms between lines **/
+        XCTAssertEqual(model.hasPitch, false)
+        XCTAssertTrue(model.lyricsType == .lrc)
     }
     
     func testIncludeCopyrightSentence1() {
