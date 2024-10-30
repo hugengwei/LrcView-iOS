@@ -139,11 +139,11 @@ class TestParser: XCTestCase {
             return
         }
         XCTAssert(model.lines.count == 44)
-        XCTAssert(model.lines.first!.beginTime == 1067 + 10)
+        XCTAssert(model.lines.first!.beginTime == 1067 - 10)
         XCTAssert(model.name  == "十年")
         XCTAssert(model.singer  == "陈奕迅")
         XCTAssert(model.lyricsType  == .krc)
-        XCTAssertEqual(model.duration, 381601 + 10)
+        XCTAssertEqual(model.duration, 381601 - 10)
         XCTAssert(model.preludeEndPosition  == 0)
         XCTAssertTrue(model.hasPitch == false)
     }
@@ -164,6 +164,17 @@ class TestParser: XCTestCase {
         XCTAssertEqual(model.duration, 253637+3117)
         XCTAssert(model.preludeEndPosition  == 0)
         XCTAssertTrue(model.hasPitch == false)
+    }
+    
+    func testKRCFile3() { /// will not crash #CSD-68440
+        let url = URL(fileURLWithPath: Bundle.current.path(forResource: "krc-error-pattern", ofType: "krc")!)
+        let data = try! Data(contentsOf: url)
+        let p = KRCParser()
+        guard let model = p.parse(krcFileData: data, lyricOffset: 10) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(model.lines.count == 0)
     }
     
     func testPitchParser() {

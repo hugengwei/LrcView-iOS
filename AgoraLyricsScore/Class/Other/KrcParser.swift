@@ -71,14 +71,16 @@ class KRCParser {
                     /// key值，从第二个字符开始取，到“:”之前
                     let key = String(line[line.index(after: line.startIndex)..<range.lowerBound])
                     /// value值，“:”之后到“]”之前
-                    let value = String(line[range.upperBound..<line.index(before: line.endIndex)])
-                    metadata[key] = value
+                    if range.upperBound < line.index(before: line.endIndex) { /** Fix if line = "[ti:" */
+                        let value = String(line[range.upperBound..<line.index(before: line.endIndex)])
+                        metadata[key] = value
+                    } else {
+                        Log.errorText(text: "metadata value is empty, key:\(key)", tag: logTag)
+                    }
                 }
                 else {
                     if line.contains(">"),  line.contains("<") {
-                        let offsetValue: UInt = UInt(lyricOffset)
-                        
-                        if let lineModel = parseLine(line: line, offset: offsetValue) {
+                        if let lineModel = parseLine(line: line, offset: lyricOffset) {
                             /* check line duration valid */
                             if !lineModel.tones.isEmpty,
                                lineModel.duration != lineModel.tones.map({ $0.duration }).reduce(0, +) {
@@ -109,7 +111,7 @@ class KRCParser {
     ///   - line: 行字符串, 如：`[0,1600]<0,177,0>星<177,177,0>晴<354,177,0> <531,177,0>-<708,177,0> <885,177,0>我<1062,177,0>的<1239,177,0>女<1416,177,0>孩`
     ///   - offset: metadata中的offset字段，表示时间偏移量。用于调整歌词与歌曲播放时间的同步性。
     /// - Returns: 行模型
-    private func parseLine(line: String, offset: UInt) -> LyricLineModel? {
+    private func parseLine(line: String, offset: Int) -> LyricLineModel? {
         guard let range = line.range(of: "["), let rangeEnd = line.range(of: "]") else {
             return nil
         }
@@ -122,7 +124,11 @@ class KRCParser {
             return nil
         }
         
-        let lineStartTime = offset + (UInt(timeComponents[0].trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0)
+        /// handle line start time
+        let lineStartTimeInFile = Int(timeComponents[0].trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0
+        let lineStartTimeInFileAfterOffset = max(0, lineStartTimeInFile - offset)
+        let lineStartTime = UInt(lineStartTimeInFileAfterOffset)
+        
         let lineDuration = UInt(timeComponents[1].trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0
         let lineContent = line[rangeEnd.upperBound...].trimmingCharacters(in: .whitespacesAndNewlines)
         
